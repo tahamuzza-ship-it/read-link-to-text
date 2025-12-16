@@ -1,5 +1,16 @@
 import mammoth from "mammoth";
 
+function normalizeUrl(url) {
+  // Si es Google Docs, exportar como DOCX automáticamente
+  if (url.includes("docs.google.com/document")) {
+    const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+    if (match) {
+      return `https://docs.google.com/document/d/${match[1]}/export?format=docx`;
+    }
+  }
+  return url;
+}
+
 export default {
   async fetch(request) {
     if (request.method !== "POST") {
@@ -13,10 +24,12 @@ export default {
       return new Response("Invalid JSON", { status: 400 });
     }
 
-    const url = data.url;
+    let url = data.url;
     if (!url) {
       return new Response("Missing url", { status: 400 });
     }
+
+    url = normalizeUrl(url);
 
     const response = await fetch(url);
     if (!response.ok) {
