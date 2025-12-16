@@ -1,0 +1,8 @@
+{
+  "name": "read-link-to-text",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mammoth": "^1.6.0"
+  }
+}
